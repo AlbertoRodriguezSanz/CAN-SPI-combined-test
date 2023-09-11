@@ -1,5 +1,5 @@
 # CAN-SPI-Combined-Test
-PIC firmware for performing both communication SPI and CAN tests between two PIC18F26K83 microcontrollers. The goal of this test is to replicate the operation of the microcontrollers with the absolute encoder in the end application. First, microcontroller 
+PIC firmware for performing both communication SPI and CAN tests between two PIC18F26K83 microcontrollers. The goal of this test is to replicate the operation of the microcontrollers with the absolute encoder in the end application. First, the slave device tells the master device to enable the SPI module through a CAN message
 
 ## Setup
 A breadboard with two PIC18F26K83 microcontrollers connected through two MCP2561 CAN transceivers is used as a testbench. 

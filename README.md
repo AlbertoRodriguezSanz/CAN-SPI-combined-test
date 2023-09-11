@@ -1,5 +1,5 @@
 # CAN-SPI-Combined-Test
-PIC firmware for performing a communication test between two PIC18F26K83 microcontrollers through the CAN bus. The goal of this test is to create a loop in which each time a microcontroller receives a message, it blinks the LED for 1s and then sends a message for the other node to receive.
+PIC firmware for performing both communication SPI and CAN tests between two PIC18F26K83 microcontrollers. The goal of this test is to replicate the operation of the microcontrollers with the absolute encoder in the end application. First, microcontroller 
 
 ## Setup
 A breadboard with two PIC18F26K83 microcontrollers connected through two MCP2561 CAN transceivers is used as a testbench. 

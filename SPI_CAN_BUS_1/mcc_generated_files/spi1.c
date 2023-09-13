@@ -1,0 +1,172 @@
+/**
+  SPI1 Generated Driver File
+
+  @Company
+    Microchip Technology Inc.
+
+  @File Name
+    spi1.c
+
+  @Summary
+    This is the generated driver implementation file for the SPI1 driver using PIC10 / PIC12 / PIC16 / PIC18 MCUs
+
+  @Description
+    This header file provides implementations for driver APIs for SPI1.
+    Generation Information :
+        Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.81.8
+        Device            :  PIC18F26K83
+        Driver Version    :  1.0.0
+    The generated drivers are tested against the following:
+        Compiler          :  XC8 2.36 and above or later
+        MPLAB             :  MPLAB X 6.00
+*/
+
+/*
+    (c) 2018 Microchip Technology Inc. and its subsidiaries. 
+    
+    Subject to your compliance with these terms, you may use Microchip software and any 
+    derivatives exclusively with Microchip products. It is your responsibility to comply with third party 
+    license terms applicable to your use of third party software (including open source software) that 
+    may accompany Microchip software.
+    
+    THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER 
+    EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, INCLUDING ANY 
+    IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS 
+    FOR A PARTICULAR PURPOSE.
+    
+    IN NO EVENT WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, 
+    INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND 
+    WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP 
+    HAS BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE. TO 
+    THE FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL 
+    CLAIMS IN ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT 
+    OF FEES, IF ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS 
+    SOFTWARE.
+*/
+
+#include "spi1.h"
+#include <xc.h>
+
+typedef struct { 
+    uint8_t con0; 
+    uint8_t con1; 
+    uint8_t con2; 
+    uint8_t baud; 
+    uint8_t operation;
+} spi1_configuration_t;
+
+
+//con0 == SPIxCON0, con1 == SPIxCON1, con2 == SPIxCON2, baud == SPIxBAUD, operation == Master/Slave
+static const spi1_configuration_t spi1_configuration[] = {   
+    { 0x2, 0x04, 0x03, 0x1, 0 }      //MASTER_0   
+};
+
+void SPI1_Initialize(void)
+{
+    
+    SPI1CON0 = 0x02;
+/*
+     EN = 0 -> SPI is disabled
+     0000 (Unimplemented)
+     LSBF = 0 -> Data is exchanged  MSb first (traditional SPI operation)
+     MST = 1 -> SPI module operates as the bus master
+     BMODE = 0 -> SPIxTWIDTH setting applies only to the last byte exchanged; total bits sent is SPIxTWIDTH +
+    (SPIxTCNT*8)    
+     */
+    SPI1CON1 = 0x04;
+    /*
+     SMP = 0 -> (MASTER) SDI input is sampled in the middle of data output time
+     CKE = 0 -> Output data changes on transition from idle to active clock state
+     CKP = 0 -> Idle state for SCK is low level
+     FST = 0 -> Delay to first SCK may be less than ½ baud period
+     0 (Unimplemented)
+     SSP = 1 -> SS is active low
+     SDIP = 0 -> SDI Input is active high
+     SDOP = 0 -> SDO Output is active high
+     
+     */
+    SPI1CON2 = 0x03;            //0x07
+    /*
+     BUSY = 0(X) -> (Read) Data exchange is not taking place
+     SSFLT = 0(X) -> (Read) SS(in) ended normally 
+     0 (Unimplemented) 
+     SSET = 0
+     * MASTER MODE*
+             -> SS(out) is driven to the active state while the transmit counter is not zero
+     TXR = 1 -> Data transfers are suspended if the RxFIFO is full 
+     RXR = 1 -> Data transfers are suspended if the RxFIFO is full 
+     */
+    SPI1CLK = 0x00;
+    //BAUD 1; 
+    SPI1BAUD = 0x01;
+    TRISCbits.TRISC3 = 0;
+}
+
+bool SPI1_Open(spi1_modes_t spi1UniqueConfiguration)
+{
+    if(!SPI1CON0bits.EN)
+    {
+        SPI1CON0 = spi1_configuration[spi1UniqueConfiguration].con0;
+        SPI1CON1 = spi1_configuration[spi1UniqueConfiguration].con1;
+        SPI1CON2 = spi1_configuration[spi1UniqueConfiguration].con2;// | (_SPI1CON2_SPI1RXR_MASK | _SPI1CON2_SPI1TXR_MASK);
+        SPI1BAUD = spi1_configuration[spi1UniqueConfiguration].baud;        
+        TRISCbits.TRISC3 = spi1_configuration[spi1UniqueConfiguration].operation;
+        SPI1CON0bits.EN = 1;
+        return true;
+    }
+    return false;
+}
+
+void SPI1_Close(void)
+{
+    SPI1CON0bits.EN = 0;
+}
+
+uint8_t SPI1_ExchangeByte(uint8_t data)
+{
+    SPI1TCNTL = 1;
+    SPI1TXB = data;
+    while(!PIR2bits.SPI1RXIF);
+    return SPI1RXB;
+}
+
+void SPI1_ExchangeBlock(void *block, size_t blockSize)
+{
+    uint8_t *data = block;
+    while(blockSize--)
+    {
+        SPI1TCNTL = 1;
+        SPI1TXB = *data;
+        while(!PIR2bits.SPI1RXIF);
+        *data++ = SPI1RXB;
+    }
+}
+
+// Half Duplex SPI Functions
+void SPI1_WriteBlock(void *block, size_t blockSize)
+{
+    uint8_t *data = block;
+    while(blockSize--)
+    {
+        SPI1_ExchangeByte(*data++);
+    }
+}
+
+void SPI1_ReadBlock(void *block, size_t blockSize)
+{
+    uint8_t *data = block;
+    while(blockSize--)
+    {
+        *data++ = SPI1_ExchangeByte(0);
+    }
+}
+
+void SPI1_WriteByte(uint8_t byte)
+{
+    SPI1TXB = byte;
+}
+
+uint8_t SPI1_ReadByte(void)
+{
+    return SPI1RXB;
+}

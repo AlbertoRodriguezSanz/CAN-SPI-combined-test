@@ -57,7 +57,7 @@ Both microcontrollers implement these module parameters through the Microchip Co
  
 ## SPI module configuration
 
-Described for each microcontroller on the respective README files.
+Unlike previous tests the SPI module is not implemented through the Foundation Service Libraries (FSL) integrated in the MCC. The specifics for each microcontroller are described on the respective README files.
   
 ## Requirements
 

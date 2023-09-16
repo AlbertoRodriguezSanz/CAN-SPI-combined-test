@@ -32,6 +32,10 @@ The microcontrollers are connected through two MCP2561 CAN transceivers. For suc
   -  CAN Transmit (CANTX0) -> RB2 (output)
   -  CAN Receive (CANRX0) -> RB3 (input)
   -  LED pin -> RC2 (output)
+  -  Slave Select -> RA5 (Master -> output / Slave -> input)
+  -  SPI clock -> RC3 (Master -> output / Slave -> input)
+  -  SPI Data Out (SDO) -> RC5 (output)
+  -  SPI Data In (SDI) -> RC4 (input)
 
 
 ## ECAN module configuration
@@ -53,20 +57,7 @@ Both microcontrollers implement these module parameters through the Microchip Co
  
 ## SPI module configuration
 
-Both microcontrollers implement these module parameters through the Microchip Code Configurator plugin (MCC):
-- Clock Settings
-  - Clock Source: Use system clock as CAN system clock
-  - Clock Frequency: 16MHz
-- Bit Rate Settings
-  - CAN bus speed: 1Mbps
-  - Time Quanta: 8
-  - Sync Jumpt Width: 1xTQ
-  - Sample Point: 75%
-  - Phase Segment 1: 4xTQ
-  - Phase Segment 2: 2xTQ
-  - Propagation Segment: 1xTQ
-- Transmit-Receive Settings
-  - Operation Mode: Mode 0 (Legacy)
+Described for each microcontroller on the respective README files.
   
 ## Requirements
 
@@ -90,10 +81,3 @@ Then, follow the next steps:
 * Program: `Production> Make and Program Device Main Project`
 
 
-
-
-
-
-
-
-![protoboard_schematic](https://github.com/AlbertoRodriguezSanz/CAN-SPI-combined-test/assets/95371514/f38dc9f0-ada6-4ed1-84a1-7318e9cb85ec)

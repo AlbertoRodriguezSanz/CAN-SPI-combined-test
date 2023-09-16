@@ -15,7 +15,9 @@ For this test the PICkit4 in-circuit debugger/programmer will be used to load th
 - VSS
 
 The microcontrollers are connected through two MCP2561 CAN transceivers. For such short distances, the use of termination resistors is not required. The two connectors represent the PICKIT4 pins required for programming each of the two microcontrollers. 
-![protoboard_schematic](https://github.com/AlbertoRodriguezSanz/CAN-Bus-Test/assets/95371514/cc8b1035-44ea-4e5a-bbfc-5b08e4b7b556)
+
+![CAN_SPI_COMBINED_BREADBOARD_SCHEMATIC](https://github.com/AlbertoRodriguezSanz/CAN-SPI-combined-test/assets/95371514/73dd19ac-99d1-4d03-aa4f-65dd76d71c20)
+
 
 ## Device configuration
 

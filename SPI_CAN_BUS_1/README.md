@@ -14,6 +14,9 @@ This device's firmware is programmed through Foundation Service libraries found 
 - Clock Manager (OSCCON1 and OSCFRQ registers)
   -   Clock Frequency: 16MHz, proceeding from a 64MHz base High-Frequency Oscillator Clock
 - Pin Manager:
+  -  CAN Transmit (CANTX0) -> RB2 (output)
+  -  CAN Receive (CANRX0) -> RB3 (input)
+  -  LED pin -> RC2 (output)
   -  Slave Select -> RA5 (output)
   -  SPI clock -> RC3 (output)
   -  SPI Data Out (SDO) -> RC5 (output)

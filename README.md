@@ -8,7 +8,7 @@ A breadboard with two PIC18F26K83 microcontrollers connected through two MCP2561
 
 
 For this test the PICkit4 in-circuit debugger/programmer will be used to load the firmware into the microcontroller. This needs to be connected to the microcontroller with the following pins.
-- MCLR (needs to be connected through two series pull-up resistors (10kΩ and 100-470Ω) to the power supply.
+- MCLR (needs to be connected through two series pull-up resistors: 10kΩ and 100-470Ω to the power supply)
 - PGD
 - PGC
 - VDD

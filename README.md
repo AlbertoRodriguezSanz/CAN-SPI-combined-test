@@ -54,6 +54,8 @@ Both microcontrollers implement these module parameters through the Microchip Co
   - Propagation Segment: 1xTQ
 - Transmit-Receive Settings
   - Operation Mode: Mode 0 (Legacy)
+
+No filters or masks are setup for the CAN bus communications beforehand. Messages' ID are filtered in the `main.c` file as in the previous firmware for the PIC18F2580 microcontroller.
  
 ## SPI module configuration
 

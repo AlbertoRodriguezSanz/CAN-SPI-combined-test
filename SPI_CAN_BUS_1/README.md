@@ -44,5 +44,3 @@ This device's firmware is programmed through Foundation Service libraries found 
 - Clock Settings
   - Clock Source: High Frequency Internall Oscillator
   - Baud Clock: 4MHz
-- Implemented Functions
-  - ExchangeByte  
